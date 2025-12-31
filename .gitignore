@@ -1,0 +1,2 @@
+# Ignore .claude directory (local Claude Code configuration)
+.claude/

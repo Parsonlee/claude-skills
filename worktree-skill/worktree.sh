@@ -52,14 +52,15 @@ detect_and_ensure_main_branch() {
     # 1. 检查本地是否有 main 分支
     if git show-ref --verify --quiet refs/heads/main; then
         main_branch="main"
-        info "Using local branch: main"
+        info "Using local branch: main" >&2
+        echo "$main_branch"
         return 0
     fi
 
     # 2. 检查本地是否有 master 分支
     if git show-ref --verify --quiet refs/heads/master; then
         main_branch="master"
-        info "Using local branch: master"
+        info "Using local branch: master" >&2
         echo "$main_branch"
         return 0
     fi
@@ -67,10 +68,10 @@ detect_and_ensure_main_branch() {
     # 3. 检查远程是否有 main 分支
     if git ls-remote --exit-code --heads origin main &> /dev/null; then
         main_branch="main"
-        info "Found remote branch: origin/main"
+        info "Found remote branch: origin/main" >&2
 
         # 尝试 fetch 远程分支
-        info "Fetching origin/main..."
+        info "Fetching origin/main..." >&2
         git fetch origin main:refs/remotes/origin/main 2>/dev/null || true
 
         echo "$main_branch"
@@ -80,10 +81,10 @@ detect_and_ensure_main_branch() {
     # 4. 检查远程是否有 master 分支
     if git ls-remote --exit-code --heads origin master &> /dev/null; then
         main_branch="master"
-        info "Found remote branch: origin/master"
+        info "Found remote branch: origin/master" >&2
 
         # 尝试 fetch 远程分支
-        info "Fetching origin/master..."
+        info "Fetching origin/master..." >&2
         git fetch origin master:refs/remotes/origin/master 2>/dev/null || true
 
         echo "$main_branch"
@@ -91,7 +92,7 @@ detect_and_ensure_main_branch() {
     fi
 
     # 5. 如果都没有，默认使用 main
-    info "No main/master branch found, defaulting to 'main'"
+    info "No main/master branch found, defaulting to 'main'" >&2
     echo "main"
 }
 
